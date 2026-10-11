@@ -65,7 +65,7 @@ async def make_nws_request(url: str) -> dict[str, Any] | None:
 
 
 @mcp.tool()
-async def get_alerts(state: str) -> Alerts:
+async def get_alerts(state: str) -> dict[str, list[Alert]]:
     """Get weather alerts for a US state.
 
     Args:
@@ -81,8 +81,8 @@ async def get_alerts(state: str) -> Alerts:
     #
     # `or` rather than a `get` default: NWS sends these fields as explicit
     # nulls rather than omitting them, and a default only covers a missing key.
-    return Alerts(
-        [
+    return {
+        "alerts": [
             Alert(
                 event=props.get("event") or "Unknown",
                 area=props.get("areaDesc") or "Unknown",
@@ -92,11 +92,11 @@ async def get_alerts(state: str) -> Alerts:
             )
             for props in (feature["properties"] for feature in data["features"])
         ]
-    )
+    }
 
 
 @mcp.tool()
-async def get_forecast(latitude: float, longitude: float) -> Forecast:
+async def get_forecast(latitude: float, longitude: float) -> dict[str, list[Period]]:
     """Get weather forecast for a location.
 
     Args:
@@ -121,10 +121,8 @@ async def get_forecast(latitude: float, longitude: float) -> Forecast:
     if not periods:
         raise ToolError("No forecast periods available.")
 
-    return Forecast(
-        latitude=latitude,
-        longitude=longitude,
-        periods=[
+    return {
+        "periods": [
             Period(
                 name=period["name"],
                 temperature=period["temperature"],
@@ -134,8 +132,8 @@ async def get_forecast(latitude: float, longitude: float) -> Forecast:
                 detailed_forecast=period["detailedForecast"],
             )
             for period in periods
-        ],
-    )
+        ]
+    }
 
 
 def main():
