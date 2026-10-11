@@ -1,0 +1,56 @@
+[project]
+name = "weather"
+version = "0.1.0"
+description = "A simple MCP weather server"
+readme = "README.md"
+authors = [
+    { name = "marknemeth", email = "nemeth.mark@yahoo.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "httpx2>=2.13.0",
+    "mcp[cli]>=2.3.0",
+    # weather.py imports BaseModel, Field, and RootModel directly. RootModel is v2-only.
+    "pydantic>=2.0.0",
+]
+
+[project.scripts]
+weather = "weather:main"
+
+[build-system]
+requires = ["uv_build>=0.13.0,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.8",
+]
+
+[project.scripts]
+weather = "weather:main"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+extend-exclude = ["README.md"]
+
+[tool.ruff.lint]
+select = [
+    "C4",   # flake8-comprehensions
+    "C90",  # mccabe
+    "E",    # pycodestyle
+    "F",    # pyflakes
+    "I",    # isort
+    "PERF", # Perflint
+    "PL",   # Pylint
+    "UP",   # pyupgrade
+]
+ignore = ["PERF203", "PLC0415", "PLR0402"]
+mccabe.max-complexity = 24 # Default is 10
+
+[tool.ruff.lint.pylint]
+allow-magic-value-types = ["bytes", "float", "int", "str"]
+max-args = 23                                              # Default is 5
+max-branches = 23                                          # Default is 12
+max-returns = 13                                           # Default is 6
+max-statements = 102                                       # Default is 50
