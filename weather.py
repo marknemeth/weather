@@ -71,16 +71,16 @@ async def get_alerts(state: str) -> dict[str, list[Alert]]:
     Args:
         state: Two-letter US state code (e.g. CA, NY)
     """
-    url = f"{NWS_API_BASE}/alerts/active/area/{state.upper()}"
-    data = await make_nws_request(url)
+    # url = f"{NWS_API_BASE}/alerts/active/area/{state.upper()}"
+    # data = await make_nws_request(url)
 
-    if not data or "features" not in data:
-        raise ToolError(f"Unable to fetch alerts for {state.upper()}.")
+    # if not data or "features" not in data:
+    #     raise ToolError(f"Unable to fetch alerts for {state.upper()}.")
 
-    # An empty result is an empty array, not an error.
-    #
-    # `or` rather than a `get` default: NWS sends these fields as explicit
-    # nulls rather than omitting them, and a default only covers a missing key.
+    # # An empty result is an empty array, not an error.
+    # #
+    # # `or` rather than a `get` default: NWS sends these fields as explicit
+    # # nulls rather than omitting them, and a default only covers a missing key.
     return {
         "alerts": [
             # Alert(
@@ -110,23 +110,23 @@ async def get_forecast(latitude: float, longitude: float) -> dict[str, list[Peri
         latitude: Latitude of the location
         longitude: Longitude of the location
     """
-    # First get the forecast grid endpoint
-    points_url = f"{NWS_API_BASE}/points/{latitude},{longitude}"
-    points_data = await make_nws_request(points_url)
+    # # First get the forecast grid endpoint
+    # points_url = f"{NWS_API_BASE}/points/{latitude},{longitude}"
+    # points_data = await make_nws_request(points_url)
 
-    if not points_data:
-        raise ToolError("Unable to fetch forecast data for this location.")
+    # if not points_data:
+    #     raise ToolError("Unable to fetch forecast data for this location.")
 
-    # Get the forecast URL from the points response
-    forecast_url = points_data["properties"]["forecast"]
-    forecast_data = await make_nws_request(forecast_url)
+    # # Get the forecast URL from the points response
+    # forecast_url = points_data["properties"]["forecast"]
+    # forecast_data = await make_nws_request(forecast_url)
 
-    if not forecast_data:
-        raise ToolError("Unable to fetch detailed forecast.")
+    # if not forecast_data:
+    #     raise ToolError("Unable to fetch detailed forecast.")
 
-    periods = forecast_data["properties"]["periods"][:5]  # Only show next 5 periods
-    if not periods:
-        raise ToolError("No forecast periods available.")
+    # periods = forecast_data["properties"]["periods"][:5]  # Only show next 5 periods
+    # if not periods:
+    #     raise ToolError("No forecast periods available.")
 
     return {
         "periods": [
