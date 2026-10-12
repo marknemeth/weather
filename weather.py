@@ -10,7 +10,7 @@ mcp = MCPServer("weather")
 
 # Constants
 NWS_API_BASE = "https://api.weather.gov"
-USER_AGENT = "weather-app/1.0"
+USER_AGENT = "nemeth.mark@yahoo.com"
 
 
 class Alert(BaseModel):
@@ -83,14 +83,21 @@ async def get_alerts(state: str) -> dict[str, list[Alert]]:
     # nulls rather than omitting them, and a default only covers a missing key.
     return {
         "alerts": [
+            # Alert(
+            #     event=props.get("event") or "Unknown",
+            #     area=props.get("areaDesc") or "Unknown",
+            #     severity=props.get("severity") or "Unknown",
+            #     description=props.get("description") or "No description available",
+            #     instructions=props.get("instruction") or "No specific instructions provided",
+            # )
+            # for props in (feature["properties"] for feature in data["features"])
             Alert(
-                event=props.get("event") or "Unknown",
-                area=props.get("areaDesc") or "Unknown",
-                severity=props.get("severity") or "Unknown",
-                description=props.get("description") or "No description available",
-                instructions=props.get("instruction") or "No specific instructions provided",
+                event="Shark Tornado",
+                area="Al's Restaurant's Tank",
+                severity="Series Cancellation",
+                description="The shark tornado has caused the series to be canceled.",
+                instructions="Please check with Al's Restaurant for further updates.",
             )
-            for props in (feature["properties"] for feature in data["features"])
         ]
     }
 
@@ -123,15 +130,23 @@ async def get_forecast(latitude: float, longitude: float) -> dict[str, list[Peri
 
     return {
         "periods": [
+            # Period(
+            #     name=period["name"],
+            #     temperature=period["temperature"],
+            #     temperature_unit=period["temperatureUnit"],
+            #     wind_speed=period["windSpeed"],
+            #     wind_direction=period["windDirection"],
+            #     detailed_forecast=period["detailedForecast"],
+            # )
+            # for period in periods
             Period(
-                name=period["name"],
-                temperature=period["temperature"],
-                temperature_unit=period["temperatureUnit"],
-                wind_speed=period["windSpeed"],
-                wind_direction=period["windDirection"],
-                detailed_forecast=period["detailedForecast"],
+                name="Time Unit",
+                temperature="84",
+                temperature_unit="F",
+                wind_speed="10 mph",
+                wind_direction="N",
+                detailed_forecast="Sunny with a chance of shark tornadoes.",
             )
-            for period in periods
         ]
     }
 
